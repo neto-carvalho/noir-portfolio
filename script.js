@@ -339,12 +339,79 @@ class PerformanceOptimizer {
 }
 
 /* ============================================
+   FAQ ACCORDION
+   ============================================ */
+class FAQAccordion {
+    constructor() {
+        this.faqItems = document.querySelectorAll('.faq-item');
+        this.init();
+    }
+    
+    init() {
+        this.faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Fechar todos os outros itens
+                this.faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                        const otherQuestion = otherItem.querySelector('.faq-question');
+                        otherQuestion.setAttribute('aria-expanded', 'false');
+                    }
+                });
+                
+                // Toggle do item atual
+                if (isActive) {
+                    item.classList.remove('active');
+                    question.setAttribute('aria-expanded', 'false');
+                } else {
+                    item.classList.add('active');
+                    question.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+    }
+}
+
+/* ============================================
+   TESTIMONIALS CAROUSEL
+   ============================================ */
+class TestimonialsCarousel {
+    constructor() {
+        this.track = document.querySelector('.testimonials-track');
+        this.cards = document.querySelectorAll('.testimonial-card');
+        if (this.track && this.cards.length > 0) {
+            this.init();
+        }
+    }
+    
+    init() {
+        // Calcular largura total do track
+        const cardWidth = this.cards[0].offsetWidth;
+        const gap = parseInt(getComputedStyle(this.track).gap) || 24;
+        const totalWidth = (cardWidth + gap) * this.cards.length;
+        
+        // Ajustar velocidade da animação baseada no número de cards
+        const duration = this.cards.length * 10; // 10 segundos por card
+        this.track.style.animationDuration = `${duration}s`;
+        
+        // Resetar posição quando animação completar (usando evento de animação)
+        this.track.addEventListener('animationiteration', () => {
+            // A animação CSS já faz o loop, mas garantimos suavidade
+            this.track.style.animationPlayState = 'running';
+        });
+    }
+}
+
+/* ============================================
    INICIALIZAÇÃO
    ============================================ */
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar todas as funcionalidades
     new ScrollAnimations();
-    new StatsCounter();
     new ParallaxEffects();
     new GlowEffects();
     new SmoothScroll();
@@ -352,6 +419,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new TextGradientAnimation();
     new LazyLoading();
     new PerformanceOptimizer();
+    new FAQAccordion();
+    new TestimonialsCarousel();
     
     // Adicionar classe loaded ao body
     document.body.classList.add('loaded');
