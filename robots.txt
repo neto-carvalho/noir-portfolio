@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://noir-frontend-olive.vercel.app/sitemap.xml
+
